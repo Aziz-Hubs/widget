@@ -185,10 +185,11 @@ export type HeaderButtonU =
         cancelButtonText?: string;
 
         /**
-         * Fires after the confirmation modal's confirm button is clicked and its default behavior has run.
+         * Fires after the confirmation modal's confirm button is clicked and the session is successfully resolved.
+         * It does not fire if resolving the session fails.
          * It does not replace the confirm button's default behavior.
          */
-        onConfirmed?: (ctx: ComponentContext) => void;
+        onResolved?: (ctx: ComponentContext) => void;
       };
 
       /**

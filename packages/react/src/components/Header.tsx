@@ -234,11 +234,14 @@ function Header__Buttons__Item__ResolveSession({
   const handleResolve = async () => {
     const { success, error } = await resolveSession();
     closeDialog();
-    if (!success) return console.error(error);
+    if (!success) {
+      console.error(error);
+      return false;
+    }
 
     switch (onResolved) {
       case 'stay-in-chat':
-        return;
+        break;
       case 'close-widget':
         setIsOpen(false);
         break;
@@ -253,6 +256,8 @@ function Header__Buttons__Item__ResolveSession({
         isExhaustive(onResolved, Header__Buttons__Item__ResolveSession.name);
         break;
     }
+
+    return true;
   };
 
   const handleResolveAlternative = () => {
@@ -337,9 +342,9 @@ function Header__Buttons__Item__ResolveSession({
             </Button>
             <Button
               variant="destructive"
-              onClick={() => {
-                void handleResolve();
-                button.confirmation?.onConfirmed?.(componentCtx);
+              onClick={async () => {
+                const success = await handleResolve();
+                if (success) button.confirmation?.onResolved?.(componentCtx);
               }}
               disabled={sessionState.isResolvingSession}
             >
