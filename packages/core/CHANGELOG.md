@@ -1,5 +1,11 @@
 # @opencx/widget-core
 
+## 4.0.59
+
+### Patch Changes
+
+- enable video attachment
+
 ## 4.0.58
 
 ### Patch Changes

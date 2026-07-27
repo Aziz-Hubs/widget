@@ -40,6 +40,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 import {
   getSpreadsheet,
   SPREADSHEET_ACCEPT,
+  VIDEO_ACCEPT,
 } from '../../utils/attachment-kind';
 import { dc } from '../../utils/data-component';
 import { ChatFooterItems } from './ChatFooterItems';
@@ -143,6 +144,9 @@ function FileDisplay({
   );
 }
 
+// Mirrors the server-side MAX_WIDGET_UPLOAD_BYTES cap on /widget/v2/upload.
+const MAX_FILE_BYTES = 25 * 1024 * 1024;
+
 function ChatInput() {
   const { isSmallScreen } = useIsSmallScreen();
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -218,13 +222,14 @@ function ChatInput() {
       const message = 'unsupported file type, or the file is too large';
       console.error(message);
     },
-    maxSize: 5 * 1024 * 1024,
+    maxSize: MAX_FILE_BYTES,
     accept: isHandedOff
       ? {
           'text/*': ['.txt'],
           'image/*': ['.png', '.jpg', '.jpeg', '.gif'],
           'application/pdf': ['.pdf'],
           ...SPREADSHEET_ACCEPT,
+          ...VIDEO_ACCEPT,
         }
       : {
           'image/png': ['.png'],
@@ -233,6 +238,7 @@ function ChatInput() {
           'image/webp': ['.webp'],
           'application/pdf': ['.pdf'],
           ...SPREADSHEET_ACCEPT,
+          ...VIDEO_ACCEPT,
         },
   });
 
@@ -315,7 +321,7 @@ function ChatInput() {
           <Tooltippy
             side="top"
             align="start"
-            content="attach images, PDFs, or spreadsheets (maximum size 5mb)"
+            content="attach images, videos, PDFs, or spreadsheets (maximum size 25mb)"
           >
             <Button
               onClick={dropzone__openFileSelect}

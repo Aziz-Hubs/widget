@@ -1,5 +1,13 @@
 # @opencx/widget-react-headless
 
+## 4.0.59
+
+### Patch Changes
+
+- enable video attachment
+- Updated dependencies
+  - @opencx/widget-core@4.0.59
+
 ## 4.0.58
 
 ### Patch Changes
