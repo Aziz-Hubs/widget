@@ -57,12 +57,34 @@ export class WidgetCtx {
     }
 
     const merged: Record<string, unknown> = { ...base };
-    for (const [key, value] of Object.entries(appearance)) {
-      if (blockedAppearanceObjectKeys.has(key)) continue;
-      merged[key] = WidgetCtx.mergeAppearanceValue(
-        Reflect.get(base, key),
-        value,
-      );
+    const pending: Array<{
+      base: object;
+      appearance: object;
+      target: Record<string, unknown>;
+    }> = [{ base, appearance, target: merged }];
+
+    while (pending.length > 0) {
+      const current = pending.pop();
+      if (!current) continue;
+
+      for (const [key, value] of Object.entries(current.appearance)) {
+        if (blockedAppearanceObjectKeys.has(key)) continue;
+        const baseValue = Reflect.get(current.base, key);
+        if (
+          typeof baseValue === 'object' &&
+          baseValue !== null &&
+          !Array.isArray(baseValue) &&
+          typeof value === 'object' &&
+          value !== null &&
+          !Array.isArray(value)
+        ) {
+          const child: Record<string, unknown> = { ...baseValue };
+          current.target[key] = child;
+          pending.push({ base: baseValue, appearance: value, target: child });
+        } else {
+          current.target[key] = value;
+        }
+      }
     }
     return merged;
   }

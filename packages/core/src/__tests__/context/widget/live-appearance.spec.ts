@@ -295,6 +295,50 @@ suite('live appearance', () => {
     expect(Object.prototype).not.toHaveProperty('polluted');
   });
 
+  test('iteratively merges deeply nested legacy presentation data', async () => {
+    const inlineLegacy: Record<string, unknown> = {};
+    const savedLegacy: Record<string, unknown> = {};
+    let inlineCursor = inlineLegacy;
+    let savedCursor = savedLegacy;
+    for (let depth = 0; depth < 20_000; depth += 1) {
+      const inlineChild: Record<string, unknown> = {};
+      const savedChild: Record<string, unknown> = {};
+      inlineCursor.next = inlineChild;
+      savedCursor.next = savedChild;
+      inlineCursor = inlineChild;
+      savedCursor = savedChild;
+    }
+    inlineCursor.value = 'inline';
+    savedCursor.value = 'saved';
+    const inlineConfig = {
+      token: 'inline-token',
+      theme: { primaryColor: '#111111', legacy: inlineLegacy },
+    };
+    const data = {
+      ...EXTERNAL_CONFIG,
+      appearance: { theme: { primaryColor: '#2255ff', legacy: savedLegacy } },
+    };
+    vi.mocked(
+      ApiCaller.prototype.getExternalWidgetConfig,
+    ).mockResolvedValueOnce({
+      response: new Response(),
+      data,
+    });
+
+    const widgetCtx = await WidgetCtx.initialize({ config: inlineConfig });
+    const resolvedTheme = widgetCtx.config.theme;
+    if (!resolvedTheme) throw new Error('Expected a resolved theme');
+    let resolvedCursor: unknown = Reflect.get(resolvedTheme, 'legacy');
+    for (let depth = 0; depth < 20_000; depth += 1) {
+      if (typeof resolvedCursor !== 'object' || resolvedCursor === null)
+        throw new Error(`Missing legacy value at depth ${depth}`);
+      resolvedCursor = Reflect.get(resolvedCursor, 'next');
+    }
+    if (typeof resolvedCursor !== 'object' || resolvedCursor === null)
+      throw new Error('Missing final legacy value');
+    expect(Reflect.get(resolvedCursor, 'value')).toBe('saved');
+  });
+
   test('skips only live appearance when the inline config opts out', async () => {
     const inlineConfig = {
       token: 'inline-token',
