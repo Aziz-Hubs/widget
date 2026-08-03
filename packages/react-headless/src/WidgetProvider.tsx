@@ -74,7 +74,7 @@ export function WidgetProvider({
     <context.Provider
       value={{
         widgetCtx,
-        config,
+        config: widgetCtx.config,
         components,
         componentStore,
         version,

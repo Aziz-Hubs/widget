@@ -115,6 +115,7 @@ export const TestUtils = {
               sessionPollingIntervalSeconds: 10,
               modes: [],
               ...returnValue?.data,
+              appearance: returnValue?.data?.appearance ?? null,
             },
           });
       },

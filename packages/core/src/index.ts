@@ -32,6 +32,7 @@ export type {
   ModeComponentProps,
   CustomComponent,
   CustomComponentProps,
+  WidgetAppearance,
 } from './types/widget-config';
 export type { ExternalStorage } from './types/external-storage';
 export type { OpenCxComponentNameU } from './types/component-name';

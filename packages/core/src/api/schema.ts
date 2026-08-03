@@ -754,6 +754,25 @@ export interface components {
         name: string;
         slug?: string | null;
       }[];
+      appearance: {
+        bot?: unknown;
+        humanAgent?: unknown;
+        cssOverrides?: unknown;
+        theme?: unknown;
+        disableTooltips?: unknown;
+        assets?: unknown;
+        chatBannerItems?: unknown;
+        initialMessages?: unknown;
+        advancedInitialMessages?: unknown;
+        initialQuestions?: unknown;
+        initialQuestionsPosition?: unknown;
+        chatFooterItems?: unknown;
+        textContent?: unknown;
+        anchorTarget?: unknown;
+        thisWasHelpfulOrNot?: unknown;
+        timestamps?: unknown;
+        accessibility?: unknown;
+      } | null;
     };
     WidgetPreludeDto: {
       org: {
@@ -767,6 +786,25 @@ export interface components {
         name: string;
         slug?: string | null;
       }[];
+      appearance: {
+        bot?: unknown;
+        humanAgent?: unknown;
+        cssOverrides?: unknown;
+        theme?: unknown;
+        disableTooltips?: unknown;
+        assets?: unknown;
+        chatBannerItems?: unknown;
+        initialMessages?: unknown;
+        advancedInitialMessages?: unknown;
+        initialQuestions?: unknown;
+        initialQuestionsPosition?: unknown;
+        chatFooterItems?: unknown;
+        textContent?: unknown;
+        anchorTarget?: unknown;
+        thisWasHelpfulOrNot?: unknown;
+        timestamps?: unknown;
+        accessibility?: unknown;
+      } | null;
     };
     WidgetContactTokenResponseDto: {
       /** @description The JWT token to use for further requests */

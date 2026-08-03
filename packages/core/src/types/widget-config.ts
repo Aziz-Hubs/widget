@@ -285,6 +285,13 @@ export interface WidgetConfig {
   openAfterNSeconds?: number;
 
   /**
+   * Prevent saved live appearance from overriding inline presentation options.
+   * Organization, mode, and polling settings are still loaded from the server.
+   * @default false
+   */
+  disableLiveAppearance?: boolean;
+
+  /**
    * A custom vanilla stylesheet to override the default styles. See {@link OpenCxComponentNameU} for available component names.
    *
    * @example Overriding a component's styles
@@ -672,3 +679,27 @@ export interface WidgetConfig {
    */
   apiUrl?: string;
 }
+
+export const widgetAppearanceKeys = [
+  'bot',
+  'humanAgent',
+  'cssOverrides',
+  'theme',
+  'disableTooltips',
+  'assets',
+  'chatBannerItems',
+  'initialMessages',
+  'advancedInitialMessages',
+  'initialQuestions',
+  'initialQuestionsPosition',
+  'chatFooterItems',
+  'textContent',
+  'anchorTarget',
+  'thisWasHelpfulOrNot',
+  'timestamps',
+  'accessibility',
+] as const satisfies ReadonlyArray<keyof WidgetConfig>;
+
+export type WidgetAppearance = Partial<
+  Pick<WidgetConfig, (typeof widgetAppearanceKeys)[number]>
+>;

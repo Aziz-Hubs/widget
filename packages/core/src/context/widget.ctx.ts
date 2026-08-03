@@ -1,7 +1,10 @@
 import { ApiCaller } from '../api/api-caller';
 import type { ModeDto } from '../types/dtos';
 import type { ExternalStorage } from '../types/external-storage';
-import type { WidgetConfig } from '../types/widget-config';
+import {
+  widgetAppearanceKeys,
+  type WidgetConfig,
+} from '../types/widget-config';
 import { ActiveSessionPollingCtx } from './active-session-polling.ctx';
 import { ContactCtx } from './contact.ctx';
 import { CsatCtx } from './csat.ctx';
@@ -9,6 +12,12 @@ import { MessageCtx } from './message.ctx';
 import { RouterCtx } from './router.ctx';
 import { SessionCtx } from './session.ctx';
 import { StorageCtx } from './storage.ctx';
+
+const blockedAppearanceObjectKeys = new Set([
+  '__proto__',
+  'constructor',
+  'prototype',
+]);
 
 export class WidgetCtx {
   public config: WidgetConfig;
@@ -31,6 +40,32 @@ export class WidgetCtx {
     sessions: number;
   } | null = null;
   private activeSessionPollingCtx: ActiveSessionPollingCtx;
+
+  private static mergeAppearanceValue(
+    base: unknown,
+    appearance: unknown,
+  ): unknown {
+    if (
+      typeof base !== 'object' ||
+      base === null ||
+      Array.isArray(base) ||
+      typeof appearance !== 'object' ||
+      appearance === null ||
+      Array.isArray(appearance)
+    ) {
+      return appearance;
+    }
+
+    const merged: Record<string, unknown> = { ...base };
+    for (const [key, value] of Object.entries(appearance)) {
+      if (blockedAppearanceObjectKeys.has(key)) continue;
+      merged[key] = WidgetCtx.mergeAppearanceValue(
+        Reflect.get(base, key),
+        value,
+      );
+    }
+    return merged;
+  }
 
   private constructor({
     config,
@@ -122,8 +157,20 @@ export class WidgetCtx {
       sessions: externalConfig.data?.sessionsPollingIntervalSeconds || 60,
     };
 
+    const appearance = config.disableLiveAppearance
+      ? null
+      : externalConfig.data.appearance;
+    const resolvedConfig = appearance ? { ...config } : config;
+    for (const key of widgetAppearanceKeys) {
+      if (appearance && Object.prototype.hasOwnProperty.call(appearance, key)) {
+        Object.assign(resolvedConfig, {
+          [key]: this.mergeAppearanceValue(config[key], appearance[key]),
+        });
+      }
+    }
+
     return new WidgetCtx({
-      config,
+      config: resolvedConfig,
       storage,
       modes: externalConfig.data?.modes || [],
       org: {
