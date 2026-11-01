@@ -1875,6 +1875,19 @@ export interface components {
         /** Format: uri */
         avatarUrl?: string;
       };
+      companion?: {
+        pillBackground?: string;
+        icon?: string;
+        pillLabel?: string;
+        pillLabelDisplay?: 'always' | 'hover' | 'never';
+        placeholder?: string;
+        bubbles?: boolean;
+        avatars?: boolean;
+        compact?: {
+          maxWidth?: number;
+          borderRadius?: number;
+        };
+      };
       cta?: {
         title: string;
         body?: string;

@@ -14,7 +14,7 @@ export function resolveLiveAppearance(
   config: WidgetConfig,
 ): WidgetConfig {
   if (!appearance || config.liveAppearance === false) return config;
-  const { theme, assets, textContent, bot, humanAgent } = appearance;
+  const { theme, assets, textContent, bot, humanAgent, companion } = appearance;
   // `bot.name` is required by the option's type; without one from either side
   // the org's agent name stays (useBot falls back to it).
   const botName = config.bot?.name ?? bot?.name;
@@ -33,6 +33,14 @@ export function resolveLiveAppearance(
           avatarUrl: config.bot?.avatarUrl ?? bot.avatarUrl ?? null,
         },
       }),
+    // The pill (companion display mode): code wins key by key.
+    ...(companion && {
+      companion: {
+        ...companion,
+        ...config.companion,
+        compact: { ...companion.compact, ...config.companion?.compact },
+      },
+    }),
     ...(humanAgent && {
       humanAgent: {
         ...config.humanAgent,

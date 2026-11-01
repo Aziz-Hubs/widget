@@ -141,6 +141,40 @@ describe('resolveLiveAppearance', () => {
     });
   });
 
+  it('styles the pill from the published look, code winning key by key', () => {
+    const resolved = resolveLiveAppearance(
+      {
+        displayMode: 'companion',
+        companion: {
+          pillBackground: '#100F0E',
+          pillLabel: 'Ask Maya',
+          bubbles: true,
+          compact: { borderRadius: 24, maxWidth: 420 },
+        },
+      },
+      {
+        ...base,
+        companion: {
+          pillLabel: 'Ask us',
+          compact: { maxWidth: 400 },
+          layouts: ['sidebar'],
+        },
+      },
+    );
+    expect(resolved.companion).toEqual({
+      pillBackground: '#100F0E',
+      pillLabel: 'Ask us',
+      bubbles: true,
+      layouts: ['sidebar'],
+      compact: { borderRadius: 24, maxWidth: 400 },
+    });
+    // Positive control: without code options the published pill applies as-is.
+    expect(
+      resolveLiveAppearance({ companion: { pillLabel: 'Ask Maya' } }, base)
+        .companion?.pillLabel,
+    ).toBe('Ask Maya');
+  });
+
   it('never touches the token, user or other code-owned options', () => {
     const config: WidgetConfig = {
       ...base,
