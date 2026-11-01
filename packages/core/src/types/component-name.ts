@@ -10,6 +10,18 @@ export type OpenCxComponentNameU =
   | 'trigger/unread'
 
   /* ------------------------------------------------------ */
+  /*                     CTA (teaser) card                  */
+  /* ------------------------------------------------------ */
+  | 'cta/root'
+  | 'cta/dismiss'
+  | 'cta/title'
+  | 'cta/body'
+  | 'cta/avatars'
+  | 'cta/buttons'
+  | 'cta/btn'
+  | 'cta/composer'
+
+  /* ------------------------------------------------------ */
   /*                     Sessions Screen                    */
   /* ------------------------------------------------------ */
   | 'sessions/root'

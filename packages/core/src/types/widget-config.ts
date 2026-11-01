@@ -516,6 +516,39 @@ export interface WidgetConfig {
   openAfterNSeconds?: number;
 
   /**
+   * A teaser card shown near the launcher while the widget is closed (not for
+   * `inline` widgets). Style it through `cssOverrides` with the `cta/*`
+   * component names.
+   * @default undefined (no card)
+   */
+  cta?: {
+    title: string;
+    body?: string;
+    avatarUrls?: string[];
+    /**
+     * `open-chat` opens the widget; `ask` opens a fresh chat and sends
+     * `message`; `prefill` opens a fresh chat with `message` in the composer;
+     * `url` opens `url` in a new tab.
+     */
+    buttons?: Array<{
+      text: string;
+      action: 'open-chat' | 'ask' | 'prefill' | 'url';
+      message?: string;
+      url?: string;
+      /** @default 'primary' */
+      variant?: 'primary' | 'secondary';
+    }>;
+    /** An input in the card; what the visitor types starts a fresh chat. */
+    composer?: { placeholder?: string };
+    /** How long a dismissal hides the card. @default forever */
+    dismissForDays?: number;
+    /** Wait this long after load before showing the card. @default 0 */
+    showAfterSeconds?: number;
+    /** Show only when `location.href` contains this substring. */
+    urlMatch?: string;
+  };
+
+  /**
    * A custom vanilla stylesheet to override the default styles. See {@link OpenCxComponentNameU} for available component names.
    *
    * @example Overriding a component's styles

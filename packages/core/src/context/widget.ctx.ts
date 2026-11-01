@@ -20,6 +20,8 @@ import {
   type WidgetClientFeatures,
 } from './widget-agent';
 import { log } from '../utils/log';
+import { PrimitiveState } from '../utils/PrimitiveState';
+import type { CtaOverride } from '../utils/cta-visibility';
 
 /** A configuration failure that prevents the widget from choosing a safe
  * runtime. The code is stable so headless consumers can render their own
@@ -52,6 +54,8 @@ export class WidgetCtx {
   public storageCtx?: StorageCtx;
   /** Shared by every conversation runtime: the launcher has one dot. */
   public unreadCtx: UnreadCtx;
+  /** `showCta()` / `hideCta()`; shared by every conversation runtime. */
+  public ctaOverride: PrimitiveState<CtaOverride>;
   public modes: ModeDto[] = [];
 
   public org: {
@@ -136,6 +140,8 @@ export class WidgetCtx {
       parent?.storageCtx ??
       (storage ? new StorageCtx({ storage, config }) : undefined);
     this.modes = modes;
+    this.ctaOverride =
+      parent?.ctaOverride ?? new PrimitiveState<CtaOverride>(null);
 
     this.contactCtx =
       parent?.contactCtx ??

@@ -21,6 +21,7 @@ import { WidgetContent, WidgetPopoverContent } from './WidgetPopoverContent';
 import { WidgetPopoverTrigger } from './WidgetPopoverTrigger';
 import { WidgetPopoverAnchor } from './WidgetPopoverAnchor';
 import { WidgetCompanion } from './companion/WidgetCompanion';
+import { CtaLauncherCard } from './CtaCard';
 import { UnreadViewing } from './components/UnreadViewing';
 import { PageMarksProvider } from './page-marks/PageMarksProvider';
 import { AgentChatPageActions } from './screens/chat/agent/AgentChatPageActions';
@@ -174,7 +175,10 @@ const Widget = React.forwardRef<
                 <WidgetContent />
               </>
             ) : (
-              <WidgetDisplayRoot />
+              <>
+                <WidgetDisplayRoot />
+                <CtaLauncherCard />
+              </>
             )}
           </PageMarksProvider>
         </WidgetTriggerProvider>

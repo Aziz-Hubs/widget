@@ -2,6 +2,7 @@ import { log } from '@opencx/widget-core';
 import React from 'react';
 import {
   useContact,
+  useWidget,
   useWidgetRouter,
   useWidgetTrigger,
 } from '@opencx/widget-react-headless';
@@ -9,6 +10,10 @@ import {
 export type WidgetRef = {
   /** Open the widget on a fresh conversation, optionally sending its first message. */
   newChat: (options?: { message?: string }) => Promise<void>;
+  /** Show the `cta` card now, past its dismissal, URL and delay rules. */
+  showCta: () => void;
+  /** Hide the `cta` card until `showCta()` or a reload. */
+  hideCta: () => void;
 };
 
 export function WidgetImperativeHandler({
@@ -19,6 +24,7 @@ export function WidgetImperativeHandler({
   const { contactState } = useContact();
   const { setIsOpen } = useWidgetTrigger();
   const { toChatScreen } = useWidgetRouter();
+  const { ctaOverride } = useWidget().widgetCtx;
 
   React.useImperativeHandle(
     widgetRef,
@@ -38,8 +44,10 @@ export function WidgetImperativeHandler({
           });
         }
       },
+      showCta: () => ctaOverride.set('show'),
+      hideCta: () => ctaOverride.set('hide'),
     }),
-    [contactState, setIsOpen, toChatScreen],
+    [contactState, setIsOpen, toChatScreen, ctaOverride],
   );
 
   return null;

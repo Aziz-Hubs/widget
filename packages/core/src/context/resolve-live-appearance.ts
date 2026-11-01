@@ -14,33 +14,66 @@ export function resolveLiveAppearance(
   config: WidgetConfig,
 ): WidgetConfig {
   if (!appearance || config.liveAppearance === false) return config;
-  const { theme, assets, textContent } = appearance;
+  const { theme, assets, textContent, bot, humanAgent } = appearance;
+  // `bot.name` is required by the option's type; without one from either side
+  // the org's agent name stays (useBot falls back to it).
+  const botName = config.bot?.name ?? bot?.name;
   return {
     ...config,
     displayMode: config.displayMode ?? appearance.displayMode,
     initialMessages: config.initialMessages ?? appearance.initialMessages,
     initialQuestions: config.initialQuestions ?? appearance.initialQuestions,
+    cssOverrides: config.cssOverrides ?? appearance.cssOverrides,
+    cta: config.cta ?? appearance.cta,
+    ...(bot &&
+      botName !== undefined && {
+        bot: {
+          ...config.bot,
+          name: botName,
+          avatarUrl: config.bot?.avatarUrl ?? bot.avatarUrl ?? null,
+        },
+      }),
+    ...(humanAgent && {
+      humanAgent: {
+        ...config.humanAgent,
+        avatarUrl: config.humanAgent?.avatarUrl ?? humanAgent.avatarUrl,
+      },
+    }),
     ...(theme && {
       theme: {
         ...config.theme,
         palette: config.theme?.palette ?? theme.palette,
         primaryColor: config.theme?.primaryColor ?? theme.primaryColor,
-        ...(theme.widgetTrigger?.offset && {
+        ...(theme.widgetTrigger && {
           widgetTrigger: {
             ...config.theme?.widgetTrigger,
             offset: {
               ...theme.widgetTrigger.offset,
               ...config.theme?.widgetTrigger?.offset,
             },
+            size: {
+              ...theme.widgetTrigger.size,
+              ...config.theme?.widgetTrigger?.size,
+            },
+          },
+        }),
+        ...(theme.widgetContentContainer && {
+          widgetContentContainer: {
+            ...theme.widgetContentContainer,
+            ...config.theme?.widgetContentContainer,
           },
         }),
       },
     }),
-    ...(assets?.organizationLogo && {
+    ...(assets && {
       assets: {
         ...config.assets,
         organizationLogo:
           config.assets?.organizationLogo ?? assets.organizationLogo,
+        widgetTrigger: {
+          ...assets.widgetTrigger,
+          ...config.assets?.widgetTrigger,
+        },
       },
     }),
     ...(textContent && {

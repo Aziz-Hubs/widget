@@ -1843,11 +1843,57 @@ export interface components {
             right?: number | 'initial';
             left?: number | 'initial';
           };
+          size?: {
+            button?: number;
+            icon?: number;
+          };
+        };
+        widgetContentContainer?: {
+          borderRadius?: string;
+          boxShadow?: string;
+          outline?: string;
+          outlineColor?: string;
         };
       };
       assets?: {
         /** Format: uri */
         organizationLogo?: string;
+        widgetTrigger?: {
+          /** Format: uri */
+          openIcon?: string;
+          /** Format: uri */
+          closeIcon?: string;
+        };
+      };
+      cssOverrides?: string;
+      bot?: {
+        name?: string;
+        /** Format: uri */
+        avatarUrl?: string;
+      };
+      humanAgent?: {
+        /** Format: uri */
+        avatarUrl?: string;
+      };
+      cta?: {
+        title: string;
+        body?: string;
+        avatarUrls?: string[];
+        buttons?: {
+          text: string;
+          /** @enum {string} */
+          action: 'open-chat' | 'ask' | 'prefill' | 'url';
+          message?: string;
+          url?: string;
+          /** @enum {string} */
+          variant?: 'primary' | 'secondary';
+        }[];
+        composer?: {
+          placeholder?: string;
+        };
+        dismissForDays?: number;
+        showAfterSeconds?: number;
+        urlMatch?: string;
       };
       textContent?: {
         welcomeScreen?: {

@@ -27,6 +27,8 @@ export class StorageCtx {
       `opencx-widget:org-token-${orgToken}:companion-${preference}`,
     activeSession: (orgToken: string) =>
       `opencx-widget:org-token-${orgToken}:active-session`,
+    ctaDismissedAt: (orgToken: string) =>
+      `opencx-widget:org-token-${orgToken}:cta-dismissed-at`,
   };
 
   constructor({
@@ -84,6 +86,17 @@ export class StorageCtx {
     if (raw === null) return null;
     const value = Number(raw);
     return Number.isFinite(value) ? value : null;
+  };
+
+  /** When the visitor last dismissed the CTA card (epoch ms). */
+  getCtaDismissedAt = async (): Promise<number | null> =>
+    this.getFiniteNumber(this.KEYS.ctaDismissedAt(this.config.token));
+
+  setCtaDismissedAt = async (at: number): Promise<void> => {
+    await this.storage.set(
+      this.KEYS.ctaDismissedAt(this.config.token),
+      String(at),
+    );
   };
 
   getCompanionPillOffsetX = async (): Promise<number | null> =>
