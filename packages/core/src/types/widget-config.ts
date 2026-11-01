@@ -387,6 +387,12 @@ export interface WidgetConfig {
    * cannot read a response while it arrives: pass `fetch` from `expo/fetch`.
    */
   streamingFetch?: typeof fetch;
+  /**
+   * Apply the look published in the dashboard (Widget Studio) under these
+   * options. Options set here always win, key by key. Defaults to true; set
+   * false to keep the look fully in code (e.g. previews of unpublished edits).
+   */
+  liveAppearance?: boolean;
   /** Visibility may only be reduced from the organization's defaults. */
   presentation?: {
     /** False shows each complete message while retaining live plans and tools. */

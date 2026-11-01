@@ -2,6 +2,7 @@ import { ApiCaller } from '../api/api-caller';
 import type { ModeDto } from '../types/dtos';
 import type { ExternalStorage } from '../types/external-storage';
 import type { WidgetConfig } from '../types/widget-config';
+import type { Dto } from '../api/client';
 import { ActiveSessionPollingCtx } from './active-session-polling.ctx';
 import { ContactCtx } from './contact.ctx';
 import { UploadCtx } from './upload.ctx';
@@ -37,6 +38,8 @@ export class WidgetInitializationError extends Error {
 
 export class WidgetCtx {
   public config: WidgetConfig;
+  /** The look published in the dashboard; null when none or on older backends. */
+  public readonly appearance: Dto['WidgetAppearanceDto'] | null;
   public api: ApiCaller;
 
   public contactCtx: ContactCtx;
@@ -100,6 +103,7 @@ export class WidgetCtx {
     modes,
     org,
     agent,
+    appearance,
     parent,
   }: {
     config: WidgetConfig;
@@ -112,6 +116,7 @@ export class WidgetCtx {
       name: string;
     };
     agent: WidgetAgent;
+    appearance: Dto['WidgetAppearanceDto'] | null;
     parent?: WidgetCtx;
   }) {
     if (!WidgetCtx.pollingIntervalsSeconds) {
@@ -125,6 +130,7 @@ export class WidgetCtx {
     this.getClientCapabilities = getClientCapabilities;
     this.org = org;
     this.agent = agent;
+    this.appearance = appearance;
     this.api = parent?.api ?? new ApiCaller({ config });
     this.storageCtx =
       parent?.storageCtx ??
@@ -239,6 +245,7 @@ export class WidgetCtx {
         name: externalConfig.data.org.name,
       },
       agent: resolveWidgetAgent(externalConfig.data),
+      appearance: externalConfig.data.appearance ?? null,
     });
   };
 
@@ -257,6 +264,7 @@ export class WidgetCtx {
       modes: this.modes,
       org: this.org,
       agent: this.agent,
+      appearance: this.appearance,
       parent: this,
       getRequestConfig: this.getRequestConfig,
       getClientCapabilities: this.getClientCapabilities,

@@ -12,6 +12,7 @@ import {
   type ExternalStorage,
   type WidgetConfig,
   log,
+  resolveLiveAppearance,
   WidgetCtx,
 } from '@opencx/widget-core';
 import { CompanionConversationProvider } from './ConversationWorkspace';
@@ -162,6 +163,14 @@ export function WidgetProvider({
     }
   }, [config.user?.token, identity, initialization]);
 
+  // The dashboard-published look under the embed's own options (code wins).
+  const readyCtx =
+    initialization.status === 'ready' ? initialization.widgetCtx : null;
+  const liveConfig = useMemo(
+    () => resolveLiveAppearance(readyCtx?.appearance, config),
+    [readyCtx, config],
+  );
+
   if (
     initialization.status === 'loading' ||
     ('identity' in initialization && initialization.identity !== identity)
@@ -178,7 +187,7 @@ export function WidgetProvider({
     <context.Provider
       value={{
         widgetCtx: activeCtx,
-        config,
+        config: liveConfig,
         components,
         componentStore,
         version,
@@ -189,9 +198,9 @@ export function WidgetProvider({
     </context.Provider>
   );
 
-  if (config.displayMode === 'companion' && !config.inline) {
+  if (liveConfig.displayMode === 'companion' && !liveConfig.inline) {
     return (
-      <CompanionConversationProvider widgetCtx={widgetCtx} config={config}>
+      <CompanionConversationProvider widgetCtx={widgetCtx} config={liveConfig}>
         {(activeCtx) => renderChildren(activeCtx, children)}
       </CompanionConversationProvider>
     );

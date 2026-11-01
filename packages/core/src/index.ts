@@ -62,6 +62,7 @@ export {
 
 export { WidgetCtx, WidgetInitializationError } from './context/widget.ctx';
 export { resolveClientPresentation } from './context/resolve-client-presentation';
+export { resolveLiveAppearance } from './context/resolve-live-appearance';
 export type { WidgetAgent, WidgetClientFeatures } from './context/widget-agent';
 export type { ContactCtx } from './context/contact.ctx';
 export type { SessionCtx } from './context/session.ctx';

@@ -1830,6 +1830,40 @@ export interface components {
       presentation?: components['schemas']['WidgetPresentationDto'];
       features: components['schemas']['WidgetAgentFeaturesDto'];
     };
+    WidgetAppearanceDto: {
+      /** @enum {string} */
+      displayMode?: 'popover' | 'companion';
+      theme?: {
+        primaryColor?: string;
+        /** @enum {string} */
+        palette?: 'neutral' | 'stone' | 'zinc' | 'slate';
+        widgetTrigger?: {
+          offset?: {
+            bottom?: number;
+            right?: number | 'initial';
+            left?: number | 'initial';
+          };
+        };
+      };
+      assets?: {
+        /** Format: uri */
+        organizationLogo?: string;
+      };
+      textContent?: {
+        welcomeScreen?: {
+          title?: string;
+          description?: string;
+        };
+        sessionsScreen?: {
+          headerTitle?: string;
+        };
+        chatScreen?: {
+          headerTitle?: string;
+        };
+      };
+      initialMessages?: string[];
+      initialQuestions?: string[];
+    };
     WidgetConfigDto: {
       org: {
         id: string;
@@ -1843,6 +1877,7 @@ export interface components {
         slug?: string | null;
       }[];
       agent: components['schemas']['WidgetAgentDto'];
+      appearance?: components['schemas']['WidgetAppearanceDto'] | null;
     };
     WidgetPreludeDto: {
       org: {
@@ -1857,6 +1892,7 @@ export interface components {
         slug?: string | null;
       }[];
       agent: components['schemas']['WidgetAgentDto'];
+      appearance?: components['schemas']['WidgetAppearanceDto'] | null;
     };
     WidgetHistoryDto: {
       publicId: string;
