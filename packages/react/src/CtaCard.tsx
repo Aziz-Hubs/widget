@@ -77,12 +77,26 @@ export function CtaCard({
         'shadow-[0_12px_40px_-8px_rgba(0,0,0,0.18)]',
       )}
     >
+      {cta.imageUrl && (
+        // Full-bleed banner: hugs the card's inner corners above the copy.
+        <img
+          {...dc('cta/image')}
+          src={cta.imageUrl}
+          alt=""
+          className="-mx-4 -mt-4 mb-3 block aspect-[16/9] w-[calc(100%+2rem)] max-w-none rounded-t-[calc(1rem-1px)] object-cover"
+        />
+      )}
+
       <button
         {...dc('cta/dismiss')}
         type="button"
         aria-label={t('dialog_close')}
         onClick={onDismiss}
-        className="absolute end-2 top-2 cursor-pointer rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-secondary"
+        className={cn(
+          'absolute end-2 top-2 cursor-pointer rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-secondary',
+          // Stays legible over a banner image.
+          cta.imageUrl && 'bg-background/85 text-foreground backdrop-blur',
+        )}
       >
         <XIcon className="size-4" />
       </button>

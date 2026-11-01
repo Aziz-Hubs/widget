@@ -74,6 +74,23 @@ describe('CTA card', () => {
     expect(button('Chat')?.dataset.variant).toBe('primary');
   });
 
+  it('shows a banner image only when the CTA has one', () => {
+    expect(container.querySelector('[data-component="cta/image"]')).toBeNull();
+    act(() =>
+      root.render(
+        <CtaCard
+          cta={{ ...cta, imageUrl: 'https://cdn.example.com/banner.png' }}
+          onDismiss={onDismiss}
+        />,
+      ),
+    );
+    expect(
+      container
+        .querySelector('[data-component="cta/image"]')
+        ?.getAttribute('src'),
+    ).toBe('https://cdn.example.com/banner.png');
+  });
+
   it('open-chat only opens the widget', () => {
     act(() => button('Chat')?.click());
     expect(open).toHaveBeenCalledWith(true);

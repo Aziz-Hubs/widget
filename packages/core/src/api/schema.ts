@@ -1878,6 +1878,7 @@ export interface components {
       cta?: {
         title: string;
         body?: string;
+        imageUrl?: string;
         avatarUrls?: string[];
         buttons?: {
           text: string;

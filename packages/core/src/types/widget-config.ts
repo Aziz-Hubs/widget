@@ -524,6 +524,8 @@ export interface WidgetConfig {
   cta?: {
     title: string;
     body?: string;
+    /** A banner image across the top of the card (https or a data: image). */
+    imageUrl?: string;
     avatarUrls?: string[];
     /**
      * `open-chat` opens the widget; `ask` opens a fresh chat and sends

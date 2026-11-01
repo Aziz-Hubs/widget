@@ -14,6 +14,7 @@ export type OpenCxComponentNameU =
   /* ------------------------------------------------------ */
   | 'cta/root'
   | 'cta/dismiss'
+  | 'cta/image'
   | 'cta/title'
   | 'cta/body'
   | 'cta/avatars'
